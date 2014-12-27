@@ -32,7 +32,7 @@ RUN useradd -u 28101 -N -g 28101 container || echo
 RUN mkdir -p /znc-state/configs
 RUN chown -R container:container /znc-state
 
-VOLUME ["/var/log", "/znc-state"]
+VOLUME ["/znc-state"]
 
 USER container
 CMD znc --datadir /znc-state --foreground $ZNC_ARGS || X=$?; echo The command failed, if you need to make config use: -it -e ZNC_ARGS=--makeconf; exit $X

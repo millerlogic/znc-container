@@ -18,13 +18,18 @@ RUN apt-get install build-essential libssl-dev libperl-dev pkg-config -y
 RUN apt-get install python3-dev tcl-dev -y
 
 # Get source.
-RUN wget -O/tmp/znc-1.6.2.tar.gz http://znc.in/releases/znc-1.6.2.tar.gz
-RUN cd /tmp && tar xzf znc-1.6.2.tar.gz
+ENV ZNC_VER=latest
+RUN rm -rf /tmp/setup-znc-tmp && mkdir /tmp/setup-znc-tmp
+RUN wget -nv -O/tmp/setup-znc-tmp/znc-$ZNC_VER.tar.gz http://znc.in/releases/znc-$ZNC_VER.tar.gz
+RUN cd /tmp/setup-znc-tmp && tar xzf znc-$ZNC_VER.tar.gz
 
 # Build.
-RUN cd /tmp/znc-1.6.2/ && ./configure --enable-perl --enable-python --enable-tcl \
+RUN cd /tmp/setup-znc-tmp/znc-*/ && ./configure --enable-perl --enable-python --enable-tcl \
     --enable-openssl --enable-ipv6 | grep -v 'yes$'
-RUN cd /tmp/znc-1.6.2/ && make && make install
+RUN cd /tmp/setup-znc-tmp/znc-*/ && make && make install
+
+# Clean.
+RUN rm -rf /tmp/setup-znc-tmp
 
 RUN groupadd -g 28101 container || echo
 RUN useradd -u 28101 -N -g 28101 container || echo

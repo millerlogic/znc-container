@@ -17,6 +17,10 @@ RUN apt-get install gcc make -y
 RUN apt-get install build-essential libssl-dev libperl-dev pkg-config -y
 RUN apt-get install python3-dev tcl-dev -y
 
+# Certificates
+RUN apt-get install ca-certificates -y
+RUN update-ca-certificates
+
 # Get source.
 ENV ZNC_VER=latest
 RUN rm -rf /tmp/setup-znc-tmp && mkdir /tmp/setup-znc-tmp
